@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inversiones Digitales para Ing. en Software</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Tipografía */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;900&family=JetBrains+Mono:wght@400;700&display=swap');
+
+        :root {
+            --bg-color: #050505;
+            --text-color: #ffffff;
+            --accent: #888888;
+        }
+
+        /* Ocultar el cursor por defecto en toda la página */
+        * {
+            cursor: none !important;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            background-image: radial-gradient(#1a1a1a 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Cursor Personalizado */
+        #custom-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 16px;
+            height: 16px;
+            background-color: white;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
+            mix-blend-mode: difference; /* Se vuelve negro sobre fondos blancos */
+            will-change: transform;
+        }
+
+        .cursor-hover {
+            width: 40px !important;
+            height: 40px !important;
+            border-radius: 50%;
+        }
+
+        /* Animaciones Suaves */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInAnim 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes fadeInAnim {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .delay-100 { animation-delay: 100ms; }
+        .delay-200 { animation-delay: 200ms; }
+        .delay-300 { animation-delay: 300ms; }
+
+        /* Estilos B&W */
+        .btn-bw {
+            border: 1px solid var(--text-color);
+            background: transparent;
+            color: var(--text-color);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-bw::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--text-color);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.3s ease;
+            z-index: -1;
+        }
+
+        .btn-bw:hover::before {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        .btn-bw:hover {
+            color: var(--bg-color);
+            font-weight: 600;
+        }
+
+        .card-bw {
+            border: 1px solid #333;
+            transition: all 0.3s ease;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        .card-bw:hover {
+            border-color: #fff;
+            transform: translateY(-5px);
+        }
+
+        /* Accordion / Modal de contenido */
+        .module-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s cubic-bezier(0.16, 1, 0.3, 1), padding 0.5s;
+            opacity: 0;
+        }
+
+        .module-content.active {
+            max-height: 1500px; /* Suficiente espacio */
+            padding-top: 1.5rem;
+            opacity: 1;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar-thumb { background: #333; }
+        ::-webkit-scrollbar-thumb:hover { background: #fff; }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col items-center">
+
+    <!-- Cursor cuadrado -->
+    <div id="custom-cursor"></div>
+
+    <main class="w-full max-w-5xl px-6 py-12 md:py-24 mx-auto relative z-10 flex flex-col flex-grow">
+        
+        <!-- HEADER -->
+        <header class="mb-16 text-center fade-in">
+            <h2 class="font-mono text-sm text-gray-400 mb-2 tracking-widest uppercase">// Emprendedurismo para devs</h2>
+            <h1 class="text-4xl md:text-6xl font-black uppercase tracking-tight mb-4">Inversión <br/><span class="text-transparent" style="-webkit-text-stroke: 1px white;">Digital</span></h1>
+            <p class="text-gray-400 max-w-2xl mx-auto text-lg">Eres ingeniero en software. Tienes la lógica, tienes las herramientas. Deja de programar solo para otros y empieza a construir tus propios activos digitales.</p>
+        </header>
+
+        <!-- SECCIÓN 1: ENCUESTA -->
+        <section id="survey-section" class="w-full flex flex-col items-center justify-center fade-in delay-100 min-h-[40vh]">
+            <div class="border border-white p-8 md:p-12 w-full max-w-2xl bg-black">
+                <h3 class="text-2xl font-bold mb-6 font-mono border-b border-gray-700 pb-4">INIT SYSTEM: Perfil de Inversor</h3>
+                <p class="mb-8 text-gray-300">Para darte las mejores rutas, indícame: ¿Cuál de estas áreas se alinea más con tus habilidades o intereses actuales?</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <button class="btn-bw p-4 text-left hover-trigger" onclick="processSurvey('logic')">
+                        <span class="block font-mono text-xs text-gray-400 mb-1">OPT 01</span>
+                        Lógica pesada, algoritmos y resolución de problemas complejos.
+                    </button>
+                    <button class="btn-bw p-4 text-left hover-trigger" onclick="processSurvey('creative')">
+                        <span class="block font-mono text-xs text-gray-400 mb-1">OPT 02</span>
+                        Interfaces, experiencia de usuario (UX) y creatividad visual.
+                    </button>
+                    <button class="btn-bw p-4 text-left hover-trigger" onclick="processSurvey('teaching')">
+                        <span class="block font-mono text-xs text-gray-400 mb-1">OPT 03</span>
+                        Explicar cosas técnicas, documentar y ayudar a otros a entender.
+                    </button>
+                    <button class="btn-bw p-4 text-left hover-trigger" onclick="processSurvey('business')">
+                        <span class="block font-mono text-xs text-gray-400 mb-1">OPT 04</span>
+                        Análisis de datos, automatización de flujos y ventas/mercados.
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 2: RECOMENDACIONES (Oculto inicio) -->
+        <section id="recommendations-section" class="hidden w-full flex-col items-center mb-16 fade-in">
+            <h3 class="text-3xl font-bold mb-8 font-mono text-center">Tus Vectores de Inversión</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl">
+                <!-- Recomendación Principal -->
+                <div class="border border-white p-6 bg-[#111]">
+                    <span class="text-xs bg-white text-black px-2 py-1 font-mono font-bold uppercase mb-4 inline-block">MATCH PRINCIPAL</span>
+                    <h4 id="rec-primary-title" class="text-2xl font-bold mb-2">...</h4>
+                    <p id="rec-primary-desc" class="text-gray-400 text-sm mb-4">...</p>
+                </div>
+                <!-- Recomendación Wildcard (Sorpresa) -->
+                <div class="border border-gray-600 p-6 relative overflow-hidden group">
+                    <div class="absolute inset-0 bg-white transform translate-y-full transition-transform duration-500 group-hover:translate-y-0 z-0"></div>
+                    <div class="relative z-10 group-hover:text-black transition-colors duration-500">
+                        <span class="text-xs border border-gray-500 text-gray-400 group-hover:border-black group-hover:text-black px-2 py-1 font-mono font-bold uppercase mb-4 inline-block">WILDCARD (EXPLORA ALGO NUEVO)</span>
+                        <h4 id="rec-wildcard-title" class="text-2xl font-bold mb-2">...</h4>
+                        <p id="rec-wildcard-desc" class="text-gray-500 group-hover:text-gray-800 text-sm mb-4">...</p>
+                    </div>
+                </div>
+            </div>
+            <button class="btn-bw mt-10 px-8 py-3 font-mono hover-trigger" onclick="scrollToModules()">
+                ⬇ ACCEDER A LA BASE DE DATOS COMPLETA ⬇
+            </button>
+        </section>
+
+        <!-- SECCIÓN 3: MÓDULOS DE INFORMACIÓN (Oculto inicio) -->
+        <section id="modules-section" class="hidden w-full flex-col mt-8 fade-in">
+            <h3 class="text-3xl font-bold mb-2 font-mono border-l-4 border-white pl-4">DATA_HUB: Modelos de Negocio</h3>
+            <p class="text-gray-400 mb-8 ml-5">Toda la información técnica y estratégica para empezar tu inversión de tiempo y capital.</p>
+
+            <div class="flex flex-col gap-4">
+
+                <!-- MODULO: VIDEOJUEGOS -->
+                <article class="card-bw p-6 cursor-pointer hover-trigger" onclick="toggleModule('mod-juegos')">
+                    <div class="flex justify-between items-center">
+                        <h4 class="text-xl font-bold uppercase flex items-center gap-3">
+                            <span class="font-mono text-gray-500">01</span> Creación de Videojuegos
+                        </h4>
+                        <span class="font-mono text-2xl" id="icon-mod-juegos">+</span>
+                    </div>
+                    <div id="mod-juegos" class="module-content">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-sm mt-4 border-t border-gray-800 pt-6">
+                            <div>
+                                <h5 class="font-bold text-white mb-2 uppercase border-b border-gray-800 inline-block pb-1">¿Cómo empezar? (El Proceso)</h5>
+                                <p class="text-gray-400 mb-4">Como ingeniero, ya dominas la lógica. Elige un motor: <strong>Godot</strong> (usa GDScript/C++, open-source, ideal para 2D/3D ligero) o <strong>Unity</strong> (C#, estándar de industria). Empieza con clones de juegos retro (Pong, Flappy Bird) en 1 semana. No diseñes arte complejo, usa figuras geométricas primitivas. Publica en Itch.io. Luego, crea un juego hiper-casual para móviles e intégrale AdMob para monetizar.</p>
+                                
+                                <h5 class="font-bold text-white mb-2 uppercase border-b border-gray-800 inline-block pb-1">Casos de Éxito</h5>
+                                <ul class="list-disc list-inside text-gray-400 mb-4">
+                                    <li><strong>ConcernedApe (Stardew Valley):</strong> Un solo desarrollador programó, compuso y diseñó durante 4 años.</li>
+                                    <li><strong>Flappy Bird:</strong> Desarrollado en días, mecánicas simples, altamente adictivo.</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h5 class="font-bold text-white mb-2 uppercase border-b border-gray-800 inline-block pb-1">¿Dónde consultar?</h5>
+                                <ul class="list-disc list-inside text-gray-400 mb-4">
+                                    <li><strong>Documentación:</strong> docs.godotengine.org (es una joya).</li>
+                                    <li><strong>YouTube:</strong> Brackeys (Unity/Godot), Game Maker's Toolkit (Diseño de juego).</li>
+                                    <li><strong>Comunidades:</strong> r/gamedev en Reddit, foros de TIGSource.</li>
+                                </ul>
+
+                                <h5 class="font-bold text-white mb-2 uppercase border-b border-gray-800 inline-block pb-1">Tips de Supervivencia</h5>
+                                <p class="text-gray-400 bg-gray-900 p-3 border-l-2 border-white">
+                                    <strong>Cuidado con el Feature Creep:</strong> Tu primer juego NO será el próximo GTA. Reduce el "scope" (alcance) a su mínima expresión. Haz el core loop divertido. Usa assets gratuitos (Kenney.nl) en vez de invertir semanas en pixel art si no eres diseñador.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- MODULO: DISEÑO WEB Y GRAFICO -->
+                <article class="card-bw p-6 cursor-pointer hover-trigger" onclick="toggleModule('mod-web')">
+                    <div class="flex justify-between items-center">
+                        <h4 class="text-xl font-bold uppercase flex items-center gap-3">
+                            <span class="font-mono text-gray-500">02</span> Diseño Web y Agencias Digitales
+                        </h4>
+                        <span class="font-mono text-2xl" id="icon-mod-web">+</span>
+                    </div>
+                    <div id="mod-web" class="module-content">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-sm mt-4 border-t border-gray-800 pt-6">
+                            <div>
+                                <h5 class="font-bold text-white mb-2 uppercase border-b border-gray-800 inline-block pb-1">¿Cómo empezar? (El Proceso)</h5>
+                                <p class="text-gray-400 mb-4">Vender webs no trata de código, trata de resolver problemas de negocio (ventas, reservas). Domina <strong>Figma</strong> para prototipos. Usa frameworks rápidos como <strong>Next.js + Tailwind</strong> o constructores como Webflow/Shopify. Construye 3 webs falsas de negocios locales y úsalas como portafolio. Contacta a negocios con webs anticuadas y ofréceles una versión rápida que cargue en 1 segundo y convierta más.</p>
+                                
+                                <h5 class="font-bold text-white mb-2 uppercase border-b border-gray-800 inline-block pb-1">Casos de Éxito</h5>
+                                <ul class="list-disc list-inside text-gray-400 mb-4">
+                                    <li><strong>Pieter Levels:</strong> Creador de NomadList. Crea micro-SaaS y webs funcionales rápido con PHP plano/JS.</li>
+                                    <li><strong>Agencias "Productizadas":</strong> Ofrecen "Desarrollo web por suscripción mensual", escalando a decenas de clientes.</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h5 class="font-bold text-white mb-2 uppercase border-b border-gray-800 inline-block pb-1">¿Dónde consultar?</h5>
+                                <ul class="list-disc list-inside text-gray-400 mb-4">
+                                    <li><strong>Inspiración:</strong> Awwwards, Dribbble, Godly.website.</li>
+                                    <li><strong>Roadmaps:</strong> roadmap.sh/frontend.</li>
+                                    <li><strong>UI/UX:</strong> Libro "Refactoring UI" (Obligatorio para devs).</li>
+                                </ul>
+
+                                <h5 class="font-bold text-white mb-2 uppercase border-b border-gray-800 inline-block pb-1">Tips de Supervivencia</h5>
+                                <p class="text-gray-400 bg-gray-900 p-3 border-l-2 border-white">
+                                    <strong>No reinventes la rueda:</strong> Usa templates o librerías de componentes (shadcn/ui, TailwindUI). Al cliente final no le importa si escribiste el CSS desde cero; le importa que la web traiga clientes. Haz contratos claros sobre revisiones para evitar que el cliente cambie de opinión infinitamente.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- MODULO: CREACION CONTENIDO -->
+                <article class="card-bw p-6 cursor-pointer hover-trigger" onclick="toggleModule('mod-video')">
+                    <div class="flex justify-between items-center">
+                        <h4 class="text-xl font-bold uppercase flex items-center gap-3">
+                            <span class="font-mono text-gray-500">03</span> Creación de Contenido y Edición
+                        </h4>
+                        <span class="font-mono text-2xl" id="icon-mod-video">+</span>
+                    </div>
+                    <div id="mod-video" class="module-content">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-sm mt-4 border-t border-gray-800 pt-6">
+                            <div>
+                                <h5 class="font-bold text-white mb-2 uppercase border-b border-gray-800 inline-block pb-1">¿Cómo empezar? (El Proceso)</h5>
+                                <p class="text-gray-400 mb-4">La economía de la atención paga bien. Elige un nicho tecnológico o geek. Aprende <strong>DaVinci Resolve</strong> (tiene versión gratuita profesional). El código del éxito es: Hook fuerte (primeros 5 segs) + Retención (cambio de plano cada 3-5 segs) + Valor real. Como dev, puedes automatizar partes con Python (FFmpeg) o usar IA (CapCut, Whisper para subtítulos). Monetiza vía YouTube Ads, patrocinios (sponsors tech) y afiliación.</p>
+                                
+                                <h5 class="font-bold text-white mb-2 uppercase border-b border-gray-800 inline-block pb-1">Casos de Éxito</h5>
+                                <ul class="list-disc list-inside text-gray-400 mb-4">
+                                    <li><strong>Midudev / Fazt:</strong> Programadores hispanos que crecieron masivamente resolviendo dudas reales y haciendo directos de código.</li>
+                                    <li><strong>Fireship:</strong> Formato ultrarrápido ("100 segundos"). Crecimiento explosivo por ir directo al grano.</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h5 class="font-bold text-white mb-2 uppercase border-b border-gray-800 inline-block pb-1">¿Dónde consultar?</h5>
+                                <ul class="list-disc list-inside text-gray-400 mb-4">
+                                    <li><strong>Técnica:</strong> Canales de YouTube de Casey Neistat (storytelling), Finzar (edición dinámica).</li>
+                                    <li><strong>Analíticas:</strong> VidIQ o TubeBuddy (para SEO de YouTube).</li>
+                                    <li><strong>Software:</strong> DaVinci Resolve Training oficial.</li>
+                                </ul>
+
+                                <h5 class="font-bold text-white mb-2 uppercase border-b border-gray-800 inline-block pb-1">Tips de Supervivencia</h5>
+                                <p class="text-gray-400 bg-gray-900 p-3 border-l-2 border-white">
+                                    <strong>Audio > Video:</strong> A la gente no le importa si tu cámara es 1080p o 4K, pero cerrarán el video en 2 segundos si el audio tiene eco o estática. Invierte primero en un buen micrófono. Haz guiones (scripts); improvisar código en vivo suele ser tedioso para el espectador nuevo.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- MODULO: INSTRUCTOR DE CURSOS -->
+                <article class="card-bw p-6 cursor-pointer hover-trigger" onclick="toggleModule('mod-cursos')">
+                    <div class="flex justify-between items-center">
+                        <h4 class="text-xl font-bold uppercase flex items-center gap-3">
+                            <span class="font-mono text-gray-500">04</span> Instructor de Cursos Digitales
+                        </h4>
+                        <span class="font-mono text-2xl" id="icon-mod-cursos">+</span>
+                    </div>
+                    <div id="mod-cursos" class="module-content">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-sm mt-4 border-t border-gray-800 pt-6">
+                            <div>
+                                <h5 class="font-bold text-white mb-2 uppercase border-b border-gray-800 inline-block pb-1">¿Cómo empezar? (El Proceso)</h5>
+                                <p class="text-gray-400 mb-4">El e-learning es ultra rentable (inversión inicial de tiempo = ventas pasivas por años). Identifica una tecnología en auge o un cuello de botella para universitarios (Ej: "Git avanzado para equipos", "Docker para Dummies"). Diseña el temario de lo básico a un proyecto final real. Graba pantalla (OBS Studio). Empieza publicando en <strong>Udemy</strong> para aprovechar su tráfico, luego crea tu propia plataforma con Stripe para mayor margen.</p>
+                                
+                                <h5 class="font-bold text-white mb-2 uppercase border-b border-gray-800 inline-block pb-1">Casos de Éxito</h5>
+                                <ul class="list-disc list-inside text-gray-400 mb-4">
+                                    <li><strong>Fernando Herrera:</strong> Sus cursos de Angular, React y Node en Udemy lo convirtieron en un referente hispano masivo.</li>
+                                    <li><strong>Wes Bos:</strong> Vende cursos directamente desde sus propias landings (React, CSS Grid) a precios premium ($80-$130).</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h5 class="font-bold text-white mb-2 uppercase border-b border-gray-800 inline-block pb-1">¿Dónde consultar?</h5>
+                                <ul class="list-disc list-inside text-gray-400 mb-4">
+                                    <li><strong>Udemy Instructor Hub:</strong> Estadísticas de qué tecnologías tienen alta demanda y pocos cursos.</li>
+                                    <li><strong>Reddit:</strong> r/learnprogramming (mira qué preguntas se repiten más).</li>
+                                    <li><strong>Plataformas:</strong> Teachable, Gumroad (para vender por tu cuenta).</li>
+                                </ul>
+
+                                <h5 class="font-bold text-white mb-2 uppercase border-b border-gray-800 inline-block pb-1">Tips de Supervivencia</h5>
+                                <p class="text-gray-400 bg-gray-900 p-3 border-l-2 border-white">
+                                    <strong>La actualización es ley:</strong> En software, los frameworks cambian rápido. Debes estar dispuesto a re-grabar módulos de tu curso cada año. Ofrece soporte (un canal de Discord) a tus alumnos; las buenas reseñas son el único algoritmo que importa en Udemy.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- MODULO: MARKETPLACES -->
+                <article class="card-bw p-6 cursor-pointer hover-trigger" onclick="toggleModule('mod-market')">
+                    <div class="flex justify-between items-center">
+                        <h4 class="text-xl font-bold uppercase flex items-center gap-3">
+                            <span class="font-mono text-gray-500">05</span> Ventas en Marketplaces (Amazon / MeLi)
+                        </h4>
+                        <span class="font-mono text-2xl" id="icon-mod-market">+</span>
+                    </div>
+                    <div id="mod-market" class="module-content">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-sm mt-4 border-t border-gray-800 pt-6">
+                            <div>
+                                <h5 class="font-bold text-white mb-2 uppercase border-b border-gray-800 inline-block pb-1">¿Cómo empezar? (El Proceso)</h5>
+                                <p class="text-gray-400 mb-4">El e-commerce tradicional requiere logística, pero en digital usamos <strong>FBA (Fulfillment by Amazon)</strong> o <strong>Mercado Libre FULL</strong>. Tú envías el stock a sus bodegas, ellos venden y despachan. Como programador tu ventaja injusta es la automatización: usa las APIs de Amazon SP-API o Mercado Libre para hacer scripts que hagan scraping de precios, encuentren nichos sin competencia o gestionen tu inventario. Modelo inicial: Arbitraje (comprar barato, vender a precio de mercado).</p>
+                                
+                                <h5 class="font-bold text-white mb-2 uppercase border-b border-gray-800 inline-block pb-1">Casos de Éxito</h5>
+                                <ul class="list-disc list-inside text-gray-400 mb-4">
+                                    <li><strong>Desarrolladores de bots de Arbitraje:</strong> Devs que crearon scripts de alertas de precios bajos en Walmart para revender en Amazon, escalando a empresas propias.</li>
+                                    <li>Vendedores de accesorios de nicho (cables específicos, carcasas Raspberry) mediante marca privada.</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h5 class="font-bold text-white mb-2 uppercase border-b border-gray-800 inline-block pb-1">¿Dónde consultar?</h5>
+                                <ul class="list-disc list-inside text-gray-400 mb-4">
+                                    <li><strong>APIs:</strong> developers.mercadolibre.com, developer-docs.amazon.com.</li>
+                                    <li><strong>Investigación de mercado:</strong> Helium10, Jungle Scout.</li>
+                                    <li><strong>Educación e-comm:</strong> Seller University (gratis en Amazon).</li>
+                                </ul>
+
+                                <h5 class="font-bold text-white mb-2 uppercase border-b border-gray-800 inline-block pb-1">Tips de Supervivencia</h5>
+                                <p class="text-gray-400 bg-gray-900 p-3 border-l-2 border-white">
+                                    <strong>Los márgenes matan a los novatos:</strong> No olvides descontar la comisión del marketplace (15-20%), los costos de envío y los impuestos. Haz tu Excel o tu script de cálculo de rentabilidad antes de comprar inventario. Empieza pequeño para entender el algoritmo de posicionamiento SEO interno de las plataformas.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="mt-24 border-t border-gray-800 pt-8 text-center text-gray-500 font-mono text-xs">
+            <p>CONSTRUIDO PARA INGENIEROS DE SOFTWARE. NO ACEPTES EL CÓDIGO POR DEFECTO. HACKEA TUS FINANZAS.</p>
+        </footer>
+
+    </main>
+
+    <!-- JavaScript Integrado -->
+    <script>
+        // Lógica del Cursor Personalizado
+        const cursor = document.getElementById('custom-cursor');
+        const hoverTriggers = document.querySelectorAll('.hover-trigger');
+
+        document.addEventListener('mousemove', (e) => {
+            // Usamos requestAnimationFrame implícito al usar CSS transforms para rendimiento
+            cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -50%)`;
+        });
+
+        // Eventos para expandir/achicar cursor en elementos interactivos
+        const attachCursorEvents = () => {
+            const allHoverTriggers = document.querySelectorAll('.hover-trigger, button, a');
+            allHoverTriggers.forEach(el => {
+                el.addEventListener('mouseenter', () => cursor.classList.add('cursor-hover'));
+                el.addEventListener('mouseleave', () => cursor.classList.remove('cursor-hover'));
+            });
+        };
+        attachCursorEvents();
+
+        // Datos y Lógica de Recomendaciones
+        const profiles = {
+            'logic': {
+                primary: {
+                    title: 'Creación de Videojuegos',
+                    desc: 'Tu dominio algorítmico y matemático es perfecto para manejar lógicas complejas en motores de videojuegos como Godot o Unity. Es un mercado masivo.'
+                },
+                wildcard: {
+                    title: 'Ventas en Marketplaces (APIs)',
+                    desc: '¿Qué tal usar tu lógica no para juegos, sino para crear scripts que encuentren productos baratos y dominar algoritmos de ventas en Amazon?'
+                }
+            },
+            'creative': {
+                primary: {
+                    title: 'Diseño Web y Gráfico',
+                    desc: 'Si te gusta lo visual y el frontend, crear agencias de diseño web o vender templates en Vercel/Webflow te dará retorno rápido.'
+                },
+                wildcard: {
+                    title: 'Edición de Video / YouTube',
+                    desc: 'Aplica tu sensibilidad estética al ritmo audiovisual. Hay enorme demanda de editores técnicos que entiendan de retención de audiencia.'
+                }
+            },
+            'teaching': {
+                primary: {
+                    title: 'Instructor de Cursos Digitales',
+                    desc: 'Pocos ingenieros saben explicar bien. Si tú sí sabes, crear cursos en Udemy o plataformas propias te generará ingresos pasivos escalables.'
+                },
+                wildcard: {
+                    title: 'Creación de Videojuegos',
+                    desc: 'Hacer un juego es contar una historia e interactuar. Tus habilidades de enseñar pueden servir para crear tutoriales integrados brillantes o juegos educativos.'
+                }
+            },
+            'business': {
+                primary: {
+                    title: 'Ventas en Marketplaces',
+                    desc: 'Automatiza el e-commerce. Entiende las reglas, conecta APIs de Mercado Libre y vende en volumen analizando datos como un ingeniero.'
+                },
+                wildcard: {
+                    title: 'Diseño de Productos SaaS',
+                    desc: 'Entiendes el mercado. En lugar de vender productos físicos de otros, ¿por qué no diseñar un software como servicio (Micro-SaaS) y vender suscripciones?'
+                }
+            }
+        };
+
+        function processSurvey(answerKey) {
+            // Animación de ocultar encuesta
+            const survey = document.getElementById('survey-section');
+            survey.style.opacity = '0';
+            setTimeout(() => {
+                survey.classList.add('hidden');
+                
+                // Cargar datos
+                const data = profiles[answerKey];
+                document.getElementById('rec-primary-title').innerText = data.primary.title;
+                document.getElementById('rec-primary-desc').innerText = data.primary.desc;
+                document.getElementById('rec-wildcard-title').innerText = data.wildcard.title;
+                document.getElementById('rec-wildcard-desc').innerText = data.wildcard.desc;
+
+                // Mostrar resultados y módulos
+                const recSection = document.getElementById('recommendations-section');
+                const modSection = document.getElementById('modules-section');
+                
+                recSection.classList.remove('hidden');
+                modSection.classList.remove('hidden');
+
+                // Asegurar que los botones nuevos tengan efectos de cursor
+                attachCursorEvents();
+                
+                // Scroll suave a resultados
+                window.scrollTo({
+                    top: survey.offsetTop,
+                    behavior: 'smooth'
+                });
+            }, 500); // Esperar a que desvanezca
+        }
+
+        function scrollToModules() {
+            document.getElementById('modules-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Accordion Lógica para Módulos
+        function toggleModule(moduleId) {
+            const content = document.getElementById(moduleId);
+            const icon = document.getElementById(`icon-${moduleId}`);
+            
+            // Cerrar todos los demás primero (Opcional, para mantenerlo limpio)
+            const allModules = document.querySelectorAll('.module-content');
+            allModules.forEach(mod => {
+                if(mod.id !== moduleId && mod.classList.contains('active')) {
+                    mod.classList.remove('active');
+                    document.getElementById(`icon-${mod.id}`).innerText = '+';
+                }
+            });
+
+            // Togglear el clickeado
+            if (content.classList.contains('active')) {
+                content.classList.remove('active');
+                icon.innerText = '+';
+            } else {
+                content.classList.add('active');
+                icon.innerText = '−';
+            }
+        }
+    </script>
+</body>
+</html>
